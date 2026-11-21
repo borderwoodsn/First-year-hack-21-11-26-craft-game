@@ -1,0 +1,171 @@
+# Every element in Film mode: one per line.
+#   Name | emoji              -> a normal element (unlocked by combining)
+#   Name | emoji | starter    -> a starting block every player begins with
+# Target films are listed in targets.txt and don't need to be repeated here.
+
+# ---------- Starting blocks ----------
+Camera  | 🎥 | starter
+Actor   | 🧑 | starter
+Story   | 📖 | starter
+Light   | 💡 | starter
+Emotion | 😊 | starter
+Machine | ⚙️ | starter
+Water   | 💧 | starter
+Time    | ⏳ | starter
+
+# ---------- Basics ----------
+Movie        | 🎬
+Scene        | 🎞️
+Character    | 👤
+Fight        | 🥊
+Drama        | 🎭
+Love         | ❤️
+Memory       | 💭
+Day          | 🌤️
+Night        | 🌙
+Sun          | ☀️
+Photograph   | 📷
+Laser        | 🔴
+Rainbow      | 🌈
+Ocean        | 🌊
+Tears        | 😢
+Ice          | ❄️
+Storm        | ⛈️
+Ship         | 🛳️
+Engine       | 🔧
+Robot        | 🤖
+Time Machine | ⌛
+Projector    | 📽️
+History      | 📜
+Old Man      | 👴
+Legend       | 🗿
+Star         | ⭐
+Magic        | ✨
+Studio       | 🏢
+Slow Motion  | 🐌
+Close-up     | 🔍
+Book         | 📚
+Joy          | 😄
+
+# ---------- People & creatures ----------
+Child    | 🧒
+Family   | 👨‍👩‍👧
+Cast     | 👥
+Fear     | 😱
+Monster  | 👹
+Shark    | 🦈
+Dinosaur | 🦖
+Ghost    | 👻
+Alien    | 👽
+Wizard   | 🧙
+Clown    | 🤡
+Hero     | 🛡️
+Villain  | 🦹
+Detective| 🕵️
+Pirate   | 🏴‍☠️
+Dream    | 💤
+
+# ---------- Things & places ----------
+Space        | 🌌
+Sword        | ⚔️
+Lightsaber   | 🗡️
+Iceberg      | 🧊
+Shipwreck    | 🛟
+Tornado      | 🌪️
+Theme Park   | 🎢
+Toy          | 🧸
+Car          | 🚗
+Computer     | 💻
+Simulation   | 🕶️
+School       | 🏫
+Crime        | 🚨
+Mafia        | 🎩
+Art          | 🎨
+Cinema       | 🎦
+Popcorn      | 🍿
+Hollywood    | 🌴
+Award        | 🏆
+Director     | 📣
+Kiss         | 💋
+
+# ---------- Genres & techniques ----------
+Romance            | 💕
+Comedy             | 😂
+Rom-Com            | 💘
+Horror             | 🩸
+Suspense           | 😰
+Action             | 💥
+Stunt              | 🤸
+Sci-Fi             | 🛸
+Animation          | 🖍️
+Computer Animation | 🖥️
+CGI                | 🧩
+Bullet Time        | 🕴️
+Documentary        | 📹
+Silent Film        | 🤫
+Classic            | 🏛️
+Sequel             | 2️⃣
+Trilogy            | 3️⃣
+Blockbuster        | 💰
+Superhero          | 🦸
+Tearjerker         | 😭
+Car Chase          | 🏎️
+Creature Feature   | 🐙
+Happy Ending       | 🌅
+Plot Twist         | 🔀
+Mystery            | 🔎
+Spy                | 🥸
+
+# ---------- Added for extra routes ----------
+Lightning  | 🌩️
+Musical    | 🎶
+Witch      | 🧹
+Beach      | 🏖️
+Kung Fu    | 🥋
+Friendship | 🤝
+Teenager   | 🧑‍🎤
+Knight     | 🏇
+Dragon     | 🐉
+Fantasy    | 🏰
+Adventure  | 🧭
+Science    | 🔬
+Island     | 🏝️
+Western    | 🐎
+Cowboy     | 🤠
+
+# ---------- Added for extra routes ----------
+Spaceship    | 🚀
+Treasure     | 💎
+Princess     | 👸
+Castle       | 🏰
+Vampire      | 🧛
+Zombie       | 🧟
+War          | 🪖
+Soldier      | 💂
+Rocket       | 🛰️
+Moon         | 🌕
+Snow         | 🌨️
+Desert       | 🏜️
+City         | 🏙️
+Police       | 🚓
+Money        | 💵
+Heist        | 💼
+Explosion    | 💣
+Fire         | 🔥
+Disaster     | 🌋
+Jungle       | 🌴
+Ape          | 🦍
+Ninja        | 🥷
+Screenplay   | 📝
+Premiere     | 🎟️
+Red Carpet   | 🟥
+Remake       | ♻️
+Thriller     | 🔪
+
+# ---------- Added for extra routes ----------
+Future | 🔮
+Father | 👨
+Home   | 🏡
+Stone  | 🪨
+Code   | 🔢
+Park   | 🌳

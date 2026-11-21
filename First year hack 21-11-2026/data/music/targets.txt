@@ -1,0 +1,17 @@
+# Target songs: the goals players try to reach.
+#   Song title | emoji | Artist | Year | Fun fact shown when you win
+# Each song must be the result of at least one combination in combinations.txt.
+# Difficulty is worked out automatically from the fewest combinations needed.
+
+Three Little Birds         | 🐤 | Bob Marley & The Wailers | 1977 | Marley said the song was inspired by real birds that visited his windowsill.
+Stayin' Alive              | 🫀 | Bee Gees                 | 1977 | At about 103 BPM, it's the tempo first-aiders are taught to keep for CPR chest compressions.
+Imagine                    | 🕊️ | John Lennon              | 1971 | Lennon recorded the piano part on a white grand piano in his home studio.
+Rolling in the Deep        | 🖤 | Adele                    | 2010 | Adele wrote it the day after a breakup, and it won Record and Song of the Year at the Grammys.
+Thriller                   | 🌕 | Michael Jackson          | 1982 | The album Thriller is often cited as the best-selling album of all time.
+What a Wonderful World     | 🌈 | Louis Armstrong          | 1967 | It sold poorly in the US at first but went to No. 1 in the UK.
+Lose Yourself              | 🍝 | Eminem                   | 2002 | It was the first hip hop song to win the Academy Award for Best Original Song.
+Purple Rain                | 💜 | Prince                   | 1984 | The version on the album was mostly recorded live at a benefit concert in Minneapolis.
+Blinding Lights            | 🌃 | The Weeknd               | 2019 | It spent a record-breaking 90 weeks on the Billboard Hot 100.
+Smells Like Teen Spirit    | 🎸 | Nirvana                  | 1991 | The title came from a friend's graffiti about a deodorant brand called Teen Spirit.
+Für Elise                  | 💐 | Ludwig van Beethoven     | 1810 | It wasn't published until about 40 years after Beethoven died, and nobody is sure who "Elise" was.
+Bohemian Rhapsody          | 👑 | Queen                    | 1975 | It has no repeating chorus, and its opera section took about three weeks to record.

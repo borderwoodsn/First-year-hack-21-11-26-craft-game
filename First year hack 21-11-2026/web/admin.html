@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Craft Admin</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛠️</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Press+Start+2P&display=swap">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="arcade.css">
+  <script>
+    (function () {
+      var theme;
+      try { theme = JSON.parse(localStorage.getItem('songcraft.theme')); } catch (e) {}
+      document.documentElement.dataset.theme = theme === 'light' ? 'light' : 'dark';
+      document.documentElement.dataset.game = 'music';
+    })();
+  </script>
+  <style>
+    body { overflow: auto; user-select: text; }
+    .admin { max-width: 980px; margin: 0 auto; padding: 24px 16px 60px; width: 100%; }
+    .admin h1 { font-family: var(--font-pixel); font-size: 1.1rem; line-height: 1.6; }
+    .admin h2 { font-family: var(--font-pixel); font-size: .8rem; margin-top: 30px; }
+    .admin p { color: var(--muted); }
+    .tabs { display: flex; gap: 8px; margin: 14px 0; flex-wrap: wrap; }
+    .tabs .btn.active { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #fff; }
+    table { width: 100%; border-collapse: separate; border-spacing: 0 8px; }
+    th { text-align: left; font-family: var(--font-pixel); font-size: .5rem; color: var(--muted); padding: 0 8px; }
+    td { background: var(--panel); padding: 8px; border-top: 2px solid var(--line); border-bottom: 2px solid var(--line); vertical-align: middle; }
+    td:first-child { border-left: 2px solid var(--line); border-radius: 10px 0 0 10px; }
+    td:last-child { border-right: 2px solid var(--line); border-radius: 0 10px 10px 0; white-space: nowrap; }
+    .pair { font-weight: 700; }
+    .mode { font-size: 1.3rem; }
+    input, select {
+      padding: 7px 10px; border-radius: 8px; border: 2px solid var(--line-strong);
+      background: var(--bg); color: var(--text); font: 600 .95rem var(--font-fun); outline: none;
+    }
+    input.emoji { width: 56px; text-align: center; }
+    .votes { font-family: var(--font-pixel); font-size: .7rem; color: var(--accent); }
+    .add-form { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; background: var(--panel); padding: 14px; border-radius: 12px; border: 2px solid var(--line-strong); }
+    .msg { margin-top: 10px; font-weight: 600; }
+    .msg.ok { color: var(--good); }
+    .msg.bad { color: var(--bad); }
+    .empty { text-align: center; color: var(--muted); padding: 30px; }
+  </style>
+</head>
+<body>
+  <main class="admin">
+    <h1>🛠️ Craft admin: player suggestions</h1>
+    <p>Players can suggest what two things should make when they don't combine. Approve good ideas to add them
+      to the game instantly. They are also saved to <code>data/&lt;mode&gt;/combinations.txt</code>.
+      You can change the result or emoji before approving. This page only works on the computer running the server.</p>
+
+    <div class="tabs" id="tabs">
+      <button class="btn active" data-status="pending">⏳ Pending</button>
+      <button class="btn" data-status="approved">✅ Approved</button>
+      <button class="btn" data-status="rejected">❌ Rejected</button>
+    </div>
+    <table>
+      <thead><tr><th>Mode</th><th>Combination</th><th>Makes</th><th>Votes</th><th>From</th><th></th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <div class="empty" id="empty" hidden>Nothing here yet.</div>
+
+    <h2>➕ Add a combination yourself</h2>
+    <form class="add-form" id="addForm">
+      <select id="addMode"></select>
+      <input id="addA" placeholder="First" required>
+      <span>+</span>
+      <input id="addB" placeholder="Second" required>
+      <span>=</span>
+      <input id="addResult" placeholder="Result" required>
+      <input id="addEmoji" class="emoji" placeholder="✨" maxlength="8">
+      <button class="btn primary" type="submit">Add</button>
+    </form>
+    <div class="msg" id="msg"></div>
+    <p style="margin-top:30px"><a href="/" style="color: var(--accent)">◀ Back to the game</a></p>
+  </main>
+
+  <script>
+    'use strict';
+    const $ = (id) => document.getElementById(id);
+    let status = 'pending';
+    let modes = [];
+
+    async function call(path, body) {
+      const res = await fetch(path, body ? { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) } : undefined);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || res.statusText);
+      return data;
+    }
+
+    function say(text, ok) {
+      $('msg').textContent = text;
+      $('msg').className = 'msg ' + (ok ? 'ok' : 'bad');
+    }
+
+    function cell(content) {
+      const td = document.createElement('td');
+      if (content instanceof Node) td.append(content); else td.textContent = content;
+      return td;
+    }
+
+    async function load() {
+      let data;
+      try {
+        data = await call('/api/admin/suggestions?status=' + status);
+      } catch (e) {
+        $('rows').replaceChildren();
+        $('empty').textContent = '⚠️ ' + e.message;
+        $('empty').hidden = false;
+        return;
+      }
+      const modeEmoji = Object.fromEntries(modes.map((m) => [m.id, m.emoji]));
+      $('rows').replaceChildren(...data.suggestions.map((s) => {
+        const tr = document.createElement('tr');
+        const result = Object.assign(document.createElement('input'), { value: s.result });
+        const emoji = Object.assign(document.createElement('input'), { value: s.emoji, className: 'emoji', maxLength: 8 });
+        const makes = document.createElement('div');
+        if (status === 'pending') makes.append(emoji, ' ', result); else makes.textContent = `${s.emoji} ${s.result}`;
+        const actions = document.createElement('div');
+        if (status === 'pending') {
+          const ok = Object.assign(document.createElement('button'), { className: 'btn primary', textContent: '✅ Approve' });
+          const no = Object.assign(document.createElement('button'), { className: 'btn', textContent: '❌' });
+          ok.onclick = async () => {
+            try {
+              const r = await call('/api/admin/approve', { id: s.id, result: result.value, emoji: emoji.value });
+              say('Added: ' + r.added, true);
+              load();
+            } catch (e) { say(e.message, false); }
+          };
+          no.onclick = async () => {
+            try { await call('/api/admin/reject', { id: s.id }); say('Rejected.', true); load(); } catch (e) { say(e.message, false); }
+          };
+          actions.append(ok, ' ', no);
+        }
+        const pair = Object.assign(document.createElement('span'), { className: 'pair', textContent: `${s.first} + ${s.second}` });
+        const votes = Object.assign(document.createElement('span'), { className: 'votes', textContent: '▲ ' + s.votes });
+        tr.append(cell(Object.assign(document.createElement('span'), { className: 'mode', textContent: modeEmoji[s.mode] || s.mode })),
+          cell(pair), cell(makes), cell(votes), cell(s.player || '—'), cell(actions));
+        return tr;
+      }));
+      $('empty').textContent = 'Nothing here yet.';
+      $('empty').hidden = data.suggestions.length > 0;
+    }
+
+    $('tabs').addEventListener('click', (ev) => {
+      const b = ev.target.closest('button');
+      if (!b) return;
+      status = b.dataset.status;
+      for (const t of $('tabs').children) t.classList.toggle('active', t === b);
+      load();
+    });
+
+    $('addForm').addEventListener('submit', async (ev) => {
+      ev.preventDefault();
+      try {
+        const r = await call('/api/admin/add', {
+          mode: $('addMode').value, a: $('addA').value, b: $('addB').value,
+          result: $('addResult').value, emoji: $('addEmoji').value,
+        });
+        say('Added: ' + r.added, true);
+        $('addResult').value = '';
+      } catch (e) { say(e.message, false); }
+    });
+
+    (async () => {
+      try {
+        modes = (await call('/api/modes')).modes;
+        $('addMode').replaceChildren(...modes.map((m) => new Option(`${m.emoji} ${m.name}`, m.id)));
+      } catch { /* ignore */ }
+      load();
+    })();
+  </script>
+</body>
+</html>

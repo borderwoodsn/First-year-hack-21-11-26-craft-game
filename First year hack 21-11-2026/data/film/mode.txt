@@ -1,0 +1,2 @@
+# Settings for this game mode:  Name | emoji | what a target is called | menu position
+Film | 🎬 | film | 2

@@ -1,0 +1,16 @@
+# Target films: the goals players try to reach.
+#   Film title | emoji | Director | Year | Fun fact shown when you win
+# Each film must be the result of at least one combination in combinations.txt.
+
+Back to the Future                       | 🛹 | Robert Zemeckis   | 1985 | The DeLorean time machine has to hit 88 miles per hour to travel through time.
+The Wizard of Oz                         | 👠 | Victor Fleming    | 1939 | Dorothy's slippers are silver in the original book. The film made them ruby red to show off Technicolor.
+Jaws                                     | 🦈 | Steven Spielberg  | 1975 | The mechanical shark kept breaking down, so Spielberg showed it less, which made the film even scarier.
+Titanic                                  | 🚢 | James Cameron     | 1997 | It won 11 Oscars, tying the record held by Ben-Hur.
+E.T. the Extra-Terrestrial               | 👆 | Steven Spielberg  | 1982 | Sales of Reese's Pieces shot up after E.T. was seen eating them in the film.
+Harry Potter and the Philosopher's Stone | 🪄 | Chris Columbus    | 2001 | In the US it was released as "Harry Potter and the Sorcerer's Stone".
+Star Wars                                | 🌠 | George Lucas      | 1977 | Chewbacca's voice was made by mixing recordings of bears, walruses and other animals.
+Jurassic Park                            | 🦕 | Steven Spielberg  | 1993 | The T. rex roar was built from the sounds of a baby elephant, a tiger and an alligator.
+The Godfather                            | 🌹 | Francis Ford Coppola | 1972 | The cat Marlon Brando strokes in the opening scene was a stray found on the studio lot.
+Ghostbusters                             | 📞 | Ivan Reitman      | 1984 | Ray Parker Jr.'s theme song went to No. 1 on the US Billboard Hot 100.
+Toy Story                                | 🤠 | John Lasseter     | 1995 | It was the first feature film made entirely with computer animation.
+The Matrix                               | 💊 | The Wachowskis    | 1999 | Its famous "bullet time" shots used a ring of over 100 still cameras firing one after another.

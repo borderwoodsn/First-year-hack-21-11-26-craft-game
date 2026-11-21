@@ -1,0 +1,194 @@
+# Every element in the game: one per line.
+#   Name | emoji              -> a normal element (unlocked by combining)
+#   Name | emoji | starter    -> a starting block every player begins with
+# Lines starting with # are comments. Names are case-insensitive.
+# Target songs are listed in targets.txt and don't need to be repeated here.
+
+# ---------- Starting blocks ----------
+Sound       | 🔊 | starter
+Rhythm      | 👏 | starter
+Voice       | 🗣️ | starter
+Person      | 🧍 | starter
+Emotion     | 😊 | starter
+Electricity | ⚡ | starter
+Time        | ⏳ | starter
+Nature      | 🌿 | starter
+
+# ---------- Basics ----------
+Noise        | 📢
+Beat         | 🪘
+Tempo        | ⏱️
+Singing      | 🎤
+Choir        | 👥
+Singer       | 🧑‍🎤
+Drummer      | 🥢
+Musician     | 🎷
+Passion      | 🔥
+Melody       | 🎵
+Lyrics       | 📝
+Amplifier    | 🔈
+Power        | 🔋
+Robot        | 🤖
+History      | 📜
+Metronome    | ⏲️
+Echo         | 🔁
+Birdsong     | 🐦
+Earth        | 🌍
+Storm        | ⛈️
+Night        | 🌙
+Hippie       | 🌼
+Peace        | ☮️
+Waves        | 🌊
+Wind         | 🌬️
+Memory       | 💭
+Love         | ❤️
+Excitement   | 🤩
+Dance        | 💃
+Band         | 🧑‍🤝‍🧑
+Rap          | 🗯️
+Microphone   | 🎙️
+Age          | 👴
+Future       | 🚀
+Story        | 📖
+Drum Machine | 🕹️
+
+# ---------- Instruments ----------
+Song            | 🎶
+Piano           | 🎹
+Guitar          | 🎸
+Drums           | 🥁
+Groove          | ➰
+Bass            | 🔉
+Violin          | 🎻
+Electric Guitar | 🎸⚡
+Synthesizer     | 🎛️
+Orchestra       | 🎼
+Flute           | 🎐
+
+# ---------- Feelings & ideas ----------
+Anger       | 😡
+Rebellion   | ✊
+Teenager    | 🧑
+Heartbreak  | 💔
+Sadness     | 😢
+Fear        | 😱
+Zombie      | 🧟
+Dream       | 💤
+Rain        | 🌧️
+Heartbeat   | 💓
+Moment      | 📸
+Nostalgia   | 📼
+Neon Lights | 💡
+Love Letter | 💌
+Chaos       | 🌪️
+Reverb      | ♾️
+Thunder     | 🌩️
+Practice    | 🏋️
+
+# ---------- Genres & styles ----------
+Opera        | 🎭
+Classical    | 🏛️
+Rock         | 🤘
+Distortion   | 🌀
+Metal        | 💀
+Hard Rock    | 🪨
+Rock Opera   | 🎭🤘
+Punk         | 🧷
+Grunge       | 🪫
+Blues        | 💙
+Pop          | 🍭
+Ballad       | 🕯️
+Guitar Solo  | 🎇
+Soul         | ✨
+R&B          | 🫶
+Synthwave    | 🌆
+Funk         | 🕶️
+Disco        | 🪩
+Reggae       | 🌴
+Hip Hop      | 🧢
+Jazz         | 🎺
+Electronic   | 🖥️
+EDM          | 🎆
+Folk         | 🪕
+Country      | 🤠
+Synth-pop    | 💫
+Classic Rock | 🦖
+Dubstep      | 📡
+Salsa        | 🌶️
+Sea Shanty   | ⚓
+Musical      | 🎪
+
+# ---------- The music world ----------
+Karaoke    | 📺
+Autotune   | 🎚️
+DJ         | 🎧
+Club       | 🍸
+Rave       | 🪅
+Radio      | 📻
+Album      | 💿
+Vinyl      | 📀
+Hit Single | 📈
+Fan        | 🙋
+Concert    | 🎫
+Star       | ⭐
+Legend     | 🏆
+Festival   | ⛺
+Tour       | 🚌
+Encore     | 🙌
+Boy Band   | 👦
+Mosh Pit   | 🤼
+
+# ---------- Added for extra routes ----------
+Bird       | 🦜
+Island     | 🏝️
+Falsetto   | 🔔
+Lullaby    | 🍼
+Gospel     | 🙏
+Revenge    | 🗡️
+Monster    | 👹
+Ghost      | 👻
+Trumpet    | 📯
+Rap Battle | 🥊
+Angst      | 😤
+Sonata     | 📃
+Duet       | 👫
+Harmony    | 💞
+Recording  | ⏺️
+Studio     | 🏢
+Producer   | 🧑‍💻
+Remix      | 🔀
+Crowd      | 👯
+Anthem     | 🎌
+
+# ---------- Added for extra routes ----------
+Scream      | 😫
+Rockstar    | 😎
+Rapper      | 💬
+Diva        | 💅
+Superstar   | 🌟
+Songwriter  | ✍️
+World Music | 🌐
+Surf Rock   | 🏄
+Conductor   | 🪄
+Silence     | 🤫
+Dancer      | 🩰
+Money       | 💰
+Music Video | 📹
+Streaming   | 📱
+Viral       | 🦠
+Ukulele     | 🪀
+Sunshine    | ☀️
+Church      | ⛪
+Choir Boy   | 😇
+Tango       | 🌹
+Breakdance  | 🤸
+Lo-fi       | 🎧
+
+# ---------- Added for extra routes ----------
+Purple | 🟣
+Spirit | 👼
+Life   | 🌱
+Light  | 💡
+
+# ---------- Added in-game from player suggestions ----------
+We Love The Earth | ✨

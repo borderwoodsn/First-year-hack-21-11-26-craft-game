@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Song Craft</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎵</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Press+Start+2P&display=swap">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="arcade.css">
+  <script>
+    // Apply the saved theme before the page draws, so it doesn't flash the wrong colours.
+    (function () {
+      var theme;
+      try { theme = JSON.parse(localStorage.getItem('songcraft.theme')); } catch (e) {}
+      if (theme !== 'light' && theme !== 'dark') {
+        theme = window.matchMedia && matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      }
+      document.documentElement.dataset.theme = theme;
+      document.documentElement.dataset.game = 'music'; // the title screen always opens on Song Craft
+    })();
+  </script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="logo" id="logo">🎵 Song<span>Craft</span></div>
+
+    <div class="goal" id="goal" hidden>
+      <span class="goal-label" id="goalLabel">Make</span>
+      <span class="goal-emoji" id="goalEmoji"></span>
+      <span class="goal-text">
+        <strong id="goalName"></strong>
+        <small id="goalArtist"></small>
+      </span>
+    </div>
+
+    <div class="stats" id="stats" hidden>
+      <span title="Combinations tried">🔀 <b id="moves">0</b></span>
+      <span title="Time">⏱️ <b id="timer">0:00</b></span>
+    </div>
+
+    <div class="actions">
+      <button id="homeBtn" class="btn icon" title="Title screen" aria-label="Title screen">🏠</button>
+      <button id="quitBtn" class="btn quit" hidden title="Quit the race">🚪 Quit</button>
+      <button id="bookBtn" class="btn icon" title="Recipe book" aria-label="Recipe book">📖</button>
+      <button id="hintBtn" class="btn" hidden title="Costs 3 moves">💡 Hint</button>
+      <button id="levelsBtn" class="btn">🎼 Songs</button>
+      <button id="muteBtn" class="btn icon" title="Sound on/off">🔊</button>
+      <button id="themeBtn" class="btn icon" title="Switch light/dark mode" aria-label="Switch light/dark mode">🌙</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="board" id="board" aria-label="Crafting area">
+      <div class="board-deco" id="boardDeco" aria-hidden="true"></div>
+      <div class="board-help" id="boardHelp">
+        Drag blocks here and drop one onto another to combine them.<br>
+        <small>Click a block in the list to add it · double-click a block here to copy it · drag it back to the list to remove it · right-click a block to look it up in your recipe book</small>
+      </div>
+      <button class="btn clear" id="clearBtn">🧹 Clear</button>
+      <div class="suggest-bar" id="suggestBar" hidden>
+        <span id="suggestText"></span>
+        <button class="btn primary" id="suggestOpenBtn">💡 Suggest a result</button>
+      </div>
+      <div class="race-panel" id="racePanel" hidden>
+        <div class="rp-title">🏁 RACE</div>
+        <ol class="rp-list" id="racePanelList"></ol>
+      </div>
+    </section>
+
+    <aside class="sidebar" id="sidebar" aria-label="Your discoveries">
+      <div class="sidebar-head">
+        <div class="panel-title">🎒 YOUR COLLECTION</div>
+        <input id="search" type="search" placeholder="Search discoveries…" autocomplete="off">
+        <div class="sidebar-meta">
+          <span id="discoveredCount">0 discovered</span>
+          <label class="sort">Sort
+            <select id="sortSelect">
+              <option value="newest">Newest</option>
+              <option value="oldest">Oldest</option>
+              <option value="az">A–Z</option>
+              <option value="za">Z–A</option>
+            </select>
+          </label>
+        </div>
+      </div>
+      <div class="items" id="items"></div>
+    </aside>
+  </main>
+
+  <!-- Song picker -->
+  <div class="modal" id="levelModal" hidden>
+    <div class="modal-card wide">
+      <button class="back-btn" data-back="levelModal" aria-label="Back">◀ BACK</button>
+      <div class="mode-tabs" id="modeTabs" role="tablist" aria-label="Game mode" hidden></div>
+      <div class="picker-art" id="pickerArt" aria-hidden="true"></div>
+      <h1 id="levelTitle">Pick a song to craft 🎵</h1>
+      <p class="sub" id="levelSub">Start with eight building blocks. Combine them until you make the song. Fewer moves is better.</p>
+      <div class="daily-card" id="dailyCard" hidden></div>
+      <div class="daily-card rush-card" id="rushCard" hidden></div>
+      <div class="level-grid" id="levelGrid"></div>
+      <div class="modal-foot">
+        <button class="btn ghost" id="freePlayBtn">🌌 Free play: no goal, just explore</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Win screen -->
+  <div class="modal" id="winModal" hidden>
+    <div class="modal-card">
+      <button class="back-btn" data-back="winModal" aria-label="Back">◀ BACK</button>
+      <div class="win-banner" id="winBanner"></div>
+      <div class="win-emoji" id="winEmoji"></div>
+      <h1>You made <span id="winName"></span>!</h1>
+      <p class="sub" id="winArtist"></p>
+      <p class="fact" id="winFact"></p>
+      <div class="win-stats">
+        <div><b id="winMoves"></b><small>moves</small></div>
+        <div><b id="winTime"></b><small>time</small></div>
+        <div><b id="winPar"></b><small id="winParLabel">par</small></div>
+      </div>
+      <form id="scoreForm" class="score-form">
+        <input id="playerName" maxlength="20" placeholder="Your name" required>
+        <button class="btn primary" type="submit" id="saveScoreBtn">Save score</button>
+      </form>
+      <p class="thanks" id="scoreThanks" hidden></p>
+      <h3 id="leaderboardTitle">🏆 Leaderboard</h3>
+      <ol class="leaderboard" id="leaderboard"></ol>
+      <div class="modal-foot">
+        <button class="btn ghost" id="keepPlayingBtn">Keep exploring</button>
+        <button class="btn primary" id="nextSongBtn">Next song ▶</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Daily challenge: out of moves -->
+  <div class="modal" id="failModal" hidden>
+    <div class="modal-card">
+      <button class="back-btn" data-back="failModal" aria-label="Back">◀ BACK</button>
+      <div class="gameover">GAME OVER</div>
+      <div class="win-emoji">😵</div>
+      <h1>Out of moves!</h1>
+      <p class="sub" id="failText"></p>
+      <div class="modal-foot">
+        <button class="btn ghost" id="failMenuBtn">Back to menu</button>
+        <button class="btn primary" id="failRetryBtn">🔁 Try again</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Multiplayer -->
+  <div class="modal" id="mpModal" hidden>
+    <div class="modal-card mp-card">
+      <button class="back-btn" data-back="mpModal" aria-label="Back">◀ BACK</button>
+      <div id="mpMenu">
+        <h1>👥 Multiplayer</h1>
+        <p class="sub">Race your friends in <b id="mpModeLabel">Song Craft</b>. The first to craft the <span id="mpNoun">song</span> wins!</p>
+        <label class="mp-label">Your name
+          <input id="mpName" maxlength="16" placeholder="Your name" autocomplete="nickname">
+        </label>
+        <div class="mp-split">
+          <div class="mp-box">
+            <h3>🏠 Host</h3>
+            <p>Make a lobby and share the code.</p>
+            <button class="btn primary" id="mpHostBtn">Create lobby</button>
+          </div>
+          <div class="mp-box">
+            <h3>🔑 Join</h3>
+            <input id="mpCode" class="mp-code-input" maxlength="4" placeholder="CODE" autocomplete="off" spellcheck="false">
+            <button class="btn primary" id="mpJoinBtn">Join</button>
+          </div>
+        </div>
+        <p class="mp-address" id="mpAddress"></p>
+        <div class="modal-foot"><button class="btn ghost" id="mpBackBtn">◀ Back</button></div>
+      </div>
+      <div id="mpLobby" hidden>
+        <div class="mp-results" id="mpResults" hidden></div>
+        <div class="mp-code-label">LOBBY CODE</div>
+        <button class="mp-code" id="mpCodeShow" title="Copy the code"></button>
+        <button class="link" id="mpCopyBtn">📋 copy code</button>
+        <p class="mp-address" id="mpLobbyAddress"></p>
+        <h3>Players <span id="mpCount"></span></h3>
+        <ul class="mp-players" id="mpPlayers"></ul>
+        <div class="mp-host" id="mpHostControls" hidden>
+          <select id="mpTarget" aria-label="What to race for"></select>
+          <button class="btn primary" id="mpStartBtn">▶ START RACE</button>
+        </div>
+        <p class="sub mp-waiting" id="mpWaiting">Waiting for the host to start the race…</p>
+        <div class="modal-foot">
+          <button class="btn ghost" id="mpLeaveBtn">🚪 Leave lobby</button>
+          <button class="btn" id="mpCloseBtn" hidden>Back to board</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="countdown" id="countdown" hidden></div>
+
+  <!-- Multiplayer: are you sure you want to quit? -->
+  <div class="modal" id="quitModal" hidden>
+    <div class="modal-card">
+      <button class="back-btn" data-back="quitModal" aria-label="Back">◀ BACK</button>
+      <div class="win-emoji">🚪</div>
+      <h1>Quit the race?</h1>
+      <p class="sub" id="quitText"></p>
+      <div class="modal-foot">
+        <button class="btn" id="quitCancelBtn">Keep playing</button>
+        <button class="btn primary danger" id="quitConfirmBtn">🚪 Quit</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recipe book -->
+  <div class="modal" id="bookModal" hidden>
+    <div class="modal-card wide book-card">
+      <button class="back-btn" data-back="bookModal" aria-label="Back">◀ BACK</button>
+      <div id="bookList">
+        <h1 id="bookTitle">📖 Recipe book</h1>
+        <div class="book-progress">
+          <div class="book-bar"><i id="bookBarFill"></i></div>
+          <span id="bookCount"></span>
+        </div>
+        <input id="bookSearch" class="book-search" type="search" placeholder="Search your book…" autocomplete="off">
+        <div class="book-grid" id="bookGrid"></div>
+      </div>
+      <div id="bookEntry" class="book-entry" hidden></div>
+      <div class="modal-foot"><button class="btn" id="bookCloseBtn">Close</button></div>
+    </div>
+  </div>
+
+  <!-- Profile + achievements -->
+  <div class="modal" id="profileModal" hidden>
+    <div class="modal-card wide">
+      <button class="back-btn" data-back="profileModal" aria-label="Back">◀ BACK</button>
+      <h1>🏅 Profile</h1>
+      <p class="sub" id="profileName"></p>
+      <div class="profile-stats" id="profileStats"></div>
+      <h3>Achievements <span id="achCount"></span></h3>
+      <div class="ach-grid" id="achGrid"></div>
+      <div class="modal-foot"><button class="btn" id="profileCloseBtn">Close</button></div>
+    </div>
+  </div>
+
+  <!-- Suggest a combination -->
+  <div class="modal" id="suggestModal" hidden>
+    <div class="modal-card">
+      <button class="back-btn" data-back="suggestModal" aria-label="Back">◀ BACK</button>
+      <div class="win-emoji">💡</div>
+      <h1>Suggest a result</h1>
+      <p class="sub">What do you think these should make? The game host can add it to the game.</p>
+      <p class="suggest-pair" id="suggestPair"></p>
+      <form id="suggestForm" class="suggest-form">
+        <input id="suggestResult" maxlength="40" placeholder="e.g. Toy Story" required autocomplete="off">
+        <input id="suggestEmoji" maxlength="8" placeholder="✨" aria-label="Emoji (optional)" autocomplete="off">
+        <button class="btn primary" type="submit" id="suggestSendBtn">Send</button>
+      </form>
+      <p class="thanks" id="suggestThanks" hidden></p>
+      <div class="modal-foot"><button class="btn" id="suggestCancelBtn">Close</button></div>
+    </div>
+  </div>
+
+  <!-- Rush results -->
+  <div class="modal" id="rushModal" hidden>
+    <div class="modal-card">
+      <button class="back-btn" data-back="rushModal" aria-label="Back">◀ BACK</button>
+      <div class="win-banner" id="rushBanner">⏱️ TIME'S UP!</div>
+      <div class="rush-score" id="rushScore">0</div>
+      <p class="sub" id="rushSummary"></p>
+      <div class="rush-done" id="rushDone"></div>
+      <form id="rushForm" class="score-form">
+        <input id="rushName" maxlength="20" placeholder="Your name" required>
+        <button class="btn primary" type="submit" id="rushSaveBtn">Save score</button>
+      </form>
+      <p class="thanks" id="rushThanks" hidden></p>
+      <h3>🏆 Rush leaderboard</h3>
+      <ol class="leaderboard" id="rushBoard"></ol>
+      <div class="modal-foot">
+        <button class="btn ghost" id="rushMenuBtn">Menu</button>
+        <button class="btn primary" id="rushAgainBtn">🔁 Play again</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="ach-toast" id="achToast" role="status" aria-live="polite"></div>
+
+  <!-- Title screen -->
+  <div class="title-screen" id="titleScreen" hidden>
+    <div class="title-bg" aria-hidden="true">
+      <div class="title-stars"></div>
+      <div class="title-eq" id="titleEq"></div>
+      <div class="curtain left"></div>
+      <div class="curtain right"></div>
+      <div class="valance"></div>
+      <div class="title-strip top"></div>
+      <div class="title-strip bottom"></div>
+      <div id="titleFloaters"></div>
+    </div>
+    <div class="title-tools">
+      <button id="titleMute" class="btn icon" title="Sound on/off">🔊</button>
+      <button id="titleTheme" class="btn icon" title="Switch light/dark mode" aria-label="Switch light/dark mode">🌙</button>
+    </div>
+    <div class="title-content">
+      <div class="title-art" id="titleArt" aria-hidden="true"></div>
+      <h1 class="title-logo" id="titleLogo"><span class="t1">SONG</span><span class="t2">CRAFT</span></h1>
+      <p class="title-tag" id="titleTag">Mix sounds. Craft hits.</p>
+      <div class="title-modes" id="titleModes" role="tablist" aria-label="Choose a game"></div>
+      <div class="title-modes title-players" role="tablist" aria-label="Single player or multiplayer">
+        <button class="title-mode player-btn active" data-players="single" role="tab" aria-selected="true">👤 SINGLE PLAYER</button>
+        <button class="title-mode player-btn" data-players="multi" role="tab" aria-selected="false">👥 MULTIPLAYER</button>
+      </div>
+      <button class="start-btn" id="startBtn"><span class="blink">▶</span> PRESS START</button>
+      <button class="btn title-daily" id="titleDailyBtn">📅 Today's daily challenge</button>
+      <div class="title-extras">
+        <button class="btn" id="titleBookBtn">📖 Recipe book</button>
+        <button class="btn" id="titleProfileBtn">🏅 Profile</button>
+      </div>
+      <p class="title-foot" id="titleFoot"></p>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <canvas id="confetti"></canvas>
+
+  <script src="pixel.js"></script>
+  <script src="game.js"></script>
+  <script src="extras.js"></script>
+</body>
+</html>
